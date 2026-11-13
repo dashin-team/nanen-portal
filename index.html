@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#16324F" />
+  <meta name="description" content="南恩通訊處網站入口｜梁仕翰" />
+  <title>南恩通訊處｜工作台</title>
+  <link rel="icon" href="favicon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=Noto+Sans+TC:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app">
+    <div class="overlay" id="overlay" hidden></div>
+
+    <aside class="sidebar" id="sidebar" aria-label="主導覽">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true">南</div>
+        <div class="brand-text">
+          <div class="brand-name">南恩通訊處</div>
+          <div class="brand-agent">梁仕翰</div>
+          <div class="brand-wordmark">NANEN</div>
+        </div>
+      </div>
+
+      <nav class="nav" id="nav">
+        <a class="nav-home is-active" href="#/" data-route="home">
+          <span class="nav-ico" aria-hidden="true">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V20a1 1 0 0 1-1 1h-5.2v-6.2H10.2V21H5a1 1 0 0 1-1-1v-9.5Z"/></svg>
+          </span>
+          總覽
+        </a>
+        <div id="nav-groups"></div>
+        <div class="nav-foot">
+          <a class="nav-ext" href="https://dashin-team.github.io/" target="_blank" rel="noopener">
+            <span class="nav-ico" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.2"/><path d="M3.5 12h17M12 3.8c2.2 2.4 3.5 5.2 3.5 8.2s-1.3 5.8-3.5 8.2c-2.2-2.4-3.5-5.2-3.5-8.2S9.8 6.2 12 3.8Z"/></svg>
+            </span>
+            <span>險種快譯通</span>
+            <span class="ext-hint">原有入口</span>
+          </a>
+        </div>
+      </nav>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <button class="icon-btn menu-btn" id="menu-btn" type="button" aria-label="開啟選單" aria-controls="sidebar" aria-expanded="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+        </button>
+        <div class="topbar-titles">
+          <div class="eyebrow" id="eyebrow">工作台</div>
+          <h1 id="page-title">總覽</h1>
+        </div>
+        <div class="topbar-actions" id="topbar-actions"></div>
+      </header>
+      <div class="subnav-wrap" id="subnav-wrap" hidden>
+        <div class="subnav" id="subnav" role="tablist" aria-label="本區頁面"></div>
+      </div>
+      <main class="content" id="content"></main>
+    </div>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>
