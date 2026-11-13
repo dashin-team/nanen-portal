@@ -95,7 +95,7 @@
       id: "youtube",
       name: "南恩YouTube",
       kicker: "影片目錄",
-      desc: "南恩影片共享區：YouTube 影片目錄與分類。此站無法嵌入，會在新分頁開啟。",
+      desc: "南恩影片共享區：YouTube 影片目錄與分類（需登入）。",
       featured: true,
       icon: "video",
       sites: [
@@ -109,15 +109,6 @@
       ]
     },
   ];
-
-  const byId = new Map();
-  const groupOf = new Map();
-  for (const g of GROUPS) {
-    for (const s of g.sites) {
-      byId.set(s.id, s);
-      groupOf.set(s.id, g);
-    }
-  }
 
   const els = {
     sidebar: document.getElementById("sidebar"),
@@ -154,26 +145,26 @@
   });
 
   function renderNav() {
-    const firstOther = GROUPS.findIndex((g) => !g.featured);
     const parts = [];
-    GROUPS.forEach((g, i) => {
-      if (i === firstOther) {
-        parts.push(`<div class="nav-divider">其他資源</div>`);
-      }
+    GROUPS.forEach((g) => {
+      const only = g.sites.length === 1 ? g.sites[0] : null;
+      const head = only
+        ? `<a class="group-head" href="${only.url}" target="_blank" rel="noopener">`
+        : `<button class="group-head" type="button" data-toggle-group="${g.id}">`;
+      const headEnd = only ? "</a>" : "</button>";
       parts.push(`
-        <div class="group${g.featured ? " is-open" : ""}" data-group="${g.id}">
-          <button class="group-head" type="button" data-open-group="${g.id}">
+        <div class="group is-open" data-group="${g.id}">
+          ${head}
             <span class="nav-ico">${svg(g.icon)}</span>
             <span class="label">${g.name}</span>
             <span class="count">${g.sites.length}</span>
-            <span class="chev">${svg("chev")}</span>
-          </button>
+            ${only ? `<span class="chev ext">${svg("external")}</span>` : `<span class="chev">${svg("chev")}</span>`}
+          ${headEnd}
           <div class="group-items">
             ${g.sites.map((s) => `
-              <a class="nav-item" href="#/s/${s.id}" data-site="${s.id}">
+              <a class="nav-item" href="${s.url}" target="_blank" rel="noopener">
                 <span>${s.title}</span>
                 ${s.badge ? `<span class="badge">${s.badge}</span>` : ""}
-                ${s.newTab && !s.badge ? `<span class="badge">新分頁</span>` : ""}
               </a>`).join("")}
           </div>
         </div>`);
@@ -181,74 +172,42 @@
     els.groups.innerHTML = parts.join("");
 
     els.groups.addEventListener("click", (e) => {
-      const head = e.target.closest(".group-head");
+      const head = e.target.closest(".group-head[data-toggle-group]");
       if (!head) return;
-      const groupEl = head.closest(".group");
-      const id = head.getAttribute("data-open-group");
-      const goingToGroup = location.hash !== `#/g/${id}`;
-      if (e.detail === 1 && goingToGroup) {
-        location.hash = `#/g/${id}`;
-      }
-      groupEl.classList.toggle("is-open");
+      e.preventDefault();
+      head.closest(".group").classList.toggle("is-open");
     });
   }
 
-  function setActive(siteId, groupId, isHome) {
-    document.querySelectorAll(".nav-item").forEach((el) => {
-      el.classList.toggle("is-active", el.getAttribute("data-site") === siteId);
-    });
-    els.homeLink.classList.toggle("is-active", !!isHome);
-    document.querySelectorAll(".group").forEach((el) => {
-      const gid = el.getAttribute("data-group");
-      if (gid === groupId) el.classList.add("is-open");
-    });
-  }
-
-  function setChrome({ eyebrow, title, actions = "", tabs = "" }) {
-    els.eyebrow.textContent = eyebrow;
-    els.title.textContent = title;
-    document.title = `${title}｜南恩通訊處`;
+  function setChrome() {
+    els.eyebrow.textContent = "工作台";
+    els.title.textContent = "總覽";
+    document.title = "南恩通訊處｜工作台";
     const logout = (AUTH.enabled && isLoggedIn())
       ? `<button class="btn" type="button" id="logout-btn">登出</button>`
       : "";
-    els.actions.innerHTML = `${actions}${logout}`;
-    if (tabs) {
-      els.subnavWrap.hidden = false;
-      els.subnav.innerHTML = tabs;
-    } else {
+    els.actions.innerHTML = logout;
+    if (els.subnavWrap) {
       els.subnavWrap.hidden = true;
       els.subnav.innerHTML = "";
     }
   }
 
-  function openBtn(url, label = "在新分頁開啟") {
-    return `<a class="btn btn-primary" href="${url}" target="_blank" rel="noopener">${svg("external")}<span>${label}</span></a>`;
-  }
-
-  function groupTabs(group, current) {
-    const overview = `<button class="tab${current === "overview" ? " is-active" : ""}" type="button" data-hash="#/g/${group.id}">總覽</button>`;
-    const sites = group.sites.map((s) =>
-      `<button class="tab${current === s.id ? " is-active" : ""}" type="button" data-hash="#/s/${s.id}">${s.title}</button>`
-    ).join("");
-    return overview + sites;
-  }
-
-  function card(site, group) {
+  function siteLink(site) {
     return `
-      <button class="card" type="button" data-hash="#/s/${site.id}">
-        <div class="card-top">
-          <span class="pill">${group.name}</span>
-          ${site.badge ? `<span class="pill gold">${site.badge}</span>` : site.newTab ? `<span class="pill gold">新分頁</span>` : ""}
-        </div>
-        <h3>${site.title}</h3>
-        <p>${site.desc}</p>
-        <div class="card-foot">${site.newTab ? "在新分頁開啟 →" : "開啟 →"}</div>
-      </button>`;
+      <a class="site-link" href="${site.url}" target="_blank" rel="noopener">
+        <span class="site-link-text">
+          <strong>${site.title}</strong>
+          <em>${site.desc}</em>
+        </span>
+        ${site.badge ? `<span class="pill gold">${site.badge}</span>` : ""}
+        <span class="site-link-go">在新分頁開啟 →</span>
+      </a>`;
   }
 
   function renderHome() {
-    setChrome({ eyebrow: "工作台", title: "總覽" });
-    setActive(null, null, true);
+    setChrome();
+    els.homeLink.classList.add("is-active");
     els.content.innerHTML = `
       <section class="hero-cover" aria-label="南恩通訊處封面">
         <img class="hero-photo" src="assets/banner.webp" alt="南恩通訊處｜台南最大心，服務最用心｜富邦人壽" />
@@ -257,125 +216,40 @@
         </div>
       </section>
       <section class="hero">
-        <p>競賽獎勵、每日報報、業績戰報與南恩 YouTube，都收在這個工作台。點左側分類或下方卡片即可開啟；南恩影片共享區會在新分頁開啟。</p>
+        <p>競賽獎勵、每日報報、業績戰報與南恩 YouTube，都收在這個入口。點左側或下方卡片，會在新分頁開啟對應網站。</p>
       </section>
-      <div class="stats featured">
+      <div class="section-grid">
         ${GROUPS.map((g) => `
-          <button class="stat featured" type="button" data-hash="#/g/${g.id}">
+          <article class="section-card">
             <div class="stat-kicker">${g.kicker}</div>
-            <div class="stat-num">${g.sites.length}</div>
-            <div class="stat-desc">${g.name}</div>
-          </button>`).join("")}
-      </div>
-      ${GROUPS.map((g) => `
-        <div class="section-head">
-          <h2>${g.name}</h2>
-          <a class="more" href="#/g/${g.id}">查看分類</a>
-        </div>
-        <div class="cards">${g.sites.map((s) => card(s, g)).join("")}</div>
-      `).join("")}
-    `;
-  }
-
-  function renderGroup(group) {
-    setChrome({
-      eyebrow: group.kicker,
-      title: group.name,
-      tabs: groupTabs(group, "overview")
-    });
-    setActive(null, group.id, false);
-    els.content.innerHTML = `
-      <section class="hero"><p>${group.desc}</p></section>
-      <div class="cards">${group.sites.map((s) => card(s, group)).join("")}</div>
-    `;
-  }
-
-  function renderSite(site, group) {
-    const actions = openBtn(site.url);
-    setChrome({
-      eyebrow: group.name,
-      title: site.title,
-      actions,
-      tabs: groupTabs(group, site.id)
-    });
-    setActive(site.id, group.id, false);
-
-    if (site.newTab) {
-      els.content.innerHTML = `
-        <div class="frame-wrap">
-          <div class="fallback">
-            <div class="fallback-card">
-              <div class="mark">${svg("external")}</div>
-              <h2>${site.title}</h2>
-              <p>這個網站無法嵌入工作台，請改在新分頁開啟。${site.desc}</p>
-              ${openBtn(site.url, "開啟網站")}
+            <div class="section-card-head">
+              <h2>${g.name}</h2>
+              <span class="count">${g.sites.length}</span>
             </div>
-          </div>
-        </div>`;
-      return;
-    }
-
-    els.content.innerHTML = `
-      <div class="frame-wrap">
-        <iframe id="site-frame" title="${site.title}" src="${site.url}" referrerpolicy="no-referrer-when-downgrade"></iframe>
-      </div>`;
-
-    const iframe = document.getElementById("site-frame");
-    // If the browser blocks framing, onload may still fire with an empty frame.
-    // We cannot read cross-origin documents; a later manual check is used for known hosts.
-    iframe.addEventListener("error", () => showFrameFallback(site));
-  }
-
-  function showFrameFallback(site) {
-    const wrap = document.querySelector(".frame-wrap");
-    if (!wrap) return;
-    wrap.innerHTML = `
-      <div class="fallback">
-        <div class="fallback-card">
-          <div class="mark">${svg("external")}</div>
-          <h2>無法在此嵌入</h2>
-          <p>「${site.title}」目前不允許嵌入工作台，請改在新分頁開啟。</p>
-          ${openBtn(site.url, "開啟網站")}
-        </div>
-      </div>`;
-  }
-
-  function parseHash() {
-    const raw = (location.hash || "#/").replace(/^#/, "");
-    const parts = raw.split("/").filter(Boolean);
-    if (parts[0] === "g" && parts[1]) {
-      return { type: "group", id: parts[1] };
-    }
-    if (parts[0] === "s" && parts[1]) {
-      return { type: "site", id: parts[1] };
-    }
-    return { type: "home" };
+            <p>${g.desc}</p>
+            <div class="section-links">
+              ${g.sites.map(siteLink).join("")}
+            </div>
+          </article>`).join("")}
+      </div>
+    `;
   }
 
   function route() {
     closeDrawer();
-    const r = parseHash();
-    if (r.type === "group") {
-      const g = GROUPS.find((x) => x.id === r.id);
-      if (!g) return renderHome();
-      return renderGroup(g);
-    }
-    if (r.type === "site") {
-      const s = byId.get(r.id);
-      if (!s) return renderHome();
-      return renderSite(s, groupOf.get(r.id));
-    }
     renderHome();
   }
 
-  document.addEventListener("click", (e) => {
-    const btn = e.target.closest("[data-hash]");
-    if (!btn) return;
+  els.homeLink.addEventListener("click", (e) => {
     e.preventDefault();
-    location.hash = btn.getAttribute("data-hash");
+    closeDrawer();
+    window.scrollTo({ top: 0, behavior: "smooth" });
   });
 
-  window.addEventListener("hashchange", route);
+  document.addEventListener("click", (e) => {
+    const link = e.target.closest("a[target='_blank']");
+    if (link) closeDrawer();
+  });
 
   document.addEventListener("click", (e) => {
     if (e.target.closest("#logout-btn")) {
