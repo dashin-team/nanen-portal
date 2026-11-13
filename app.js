@@ -73,7 +73,7 @@
       id: "performance",
       name: "南恩業績戰報",
       kicker: "戰報與業績",
-      desc: "TN826 第四季競賽戰報，以及產險團隊業績表。",
+      desc: "TN826 第四季競賽戰報：競賽排名、查詢與戰報。",
       featured: true,
       icon: "chart",
       sites: [
@@ -83,12 +83,6 @@
           desc: "南恩通訊處 115 年第四季競賽排名、查詢與戰報。",
           url: "https://dashin-team.github.io/tn826-q4-report/"
         },
-        {
-          id: "pc-team-performance",
-          title: "產險團隊業績表",
-          desc: "產險團隊業績表，可共同更新。",
-          url: "https://dashin-team.github.io/pc-team-performance/"
-        }
       ]
     },
     {
