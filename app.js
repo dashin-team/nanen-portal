@@ -108,69 +108,6 @@
         }
       ]
     },
-    {
-      id: "quote",
-      name: "報價試算",
-      kicker: "提案工具",
-      desc: "意外、車險、癌症、房貸與遺產稅等即時試算。",
-      icon: "calc",
-      sites: [
-        { id: "accident-insurance", title: "骨折險報價", desc: "意外險／骨折險即時報價系統。", url: "https://dashin-team.github.io/accident-insurance/" },
-        { id: "car-quote", title: "汽機車險報價", desc: "汽機車險即時報價系統。", url: "https://dashin-team.github.io/car-quote/" },
-        { id: "cia-cib-cancer", title: "男癌／女癌試算（CIA／CIB）", desc: "富邦 CIA 男性、CIB 女性癌症險試算。", url: "https://dashin-team.github.io/cia-cib-cancer/" },
-        { id: "clz-clx-cancer", title: "男癌／女癌試算（CLZ／CLX）", desc: "豪愛無憂／真馨相守試算。", url: "https://dashin-team.github.io/clz-clx-cancer/", badge: "草稿" },
-        { id: "mortgage-calculator", title: "存房貸試算", desc: "存房貸（含寬限期）客戶分析試算。", url: "https://dashin-team.github.io/mortgage-calculator/" },
-        { id: "real-estate-activation", title: "房貸配息與分紅試算", desc: "房貸配息與分紅保單試算（數字為舉例，非保證）。", url: "https://dashin-team.github.io/real-estate-activation/" },
-        { id: "estate-tax-planner", title: "遺產稅・贈與稅規劃", desc: "遺產稅、贈與稅試算與預留稅源。", url: "https://dashin-team.github.io/estate-tax-planner/" }
-      ]
-    },
-    {
-      id: "teaching",
-      name: "教學教材",
-      kicker: "教材與觀念",
-      desc: "險種教學、風險地圖，以及梁仕翰的保障島介紹頁。",
-      icon: "book",
-      sites: [
-        { id: "accident-insurance-guide", title: "意外險教育訓練", desc: "理賠項目、職業等級與失能表。", url: "https://dashin-team.github.io/accident-insurance-guide/" },
-        { id: "cancer-risk-map", title: "癌症風險地圖", desc: "如果罹癌，需要準備多少錢？", url: "https://dashin-team.github.io/cancer-risk-map/" },
-        { id: "cancer-risk-quiz", title: "我們與癌的距離", desc: "10 題生活風險檢測。", url: "https://dashin-team.github.io/cancer-risk-quiz/" },
-        { id: "critical-illness", title: "認識重大傷病", desc: "重大傷病風險與保障規劃。", url: "https://dashin-team.github.io/critical-illness/" },
-        { id: "fubon-car-insurance-guide", title: "富邦車險健檢教學", desc: "車險健檢互動教學。", url: "https://dashin-team.github.io/fubon-car-insurance-guide/" },
-        { id: "group-injury-guide", title: "團險・職災", desc: "員工出事，這筆錢誰來付？", url: "https://dashin-team.github.io/group-injury-guide/" },
-        { id: "human-risk-map", title: "人類風險地圖", desc: "看懂疾病，也看懂風險。", url: "https://dashin-team.github.io/human-risk-map/" },
-        { id: "ltc-compare-v2", title: "失能、長照、失智險比較", desc: "三種保障的理賠條件差在哪？", url: "https://dashin-team.github.io/ltc-compare-v2/" },
-        { id: "nanen-car-claim-guide", title: "車險車禍理賠流程", desc: "南恩車險車禍理賠培訓手冊。", url: "https://dashin-team.github.io/nanen-car-claim-guide/" },
-        { id: "newborn-insurance-guide", title: "新生兒投保教戰手冊", desc: "新手爸媽規劃寶寶保障的重點整理。", url: "https://dashin-team.github.io/newborn-insurance-guide/" },
-        { id: "surgery-insurance-guide", title: "實支實付＆手術險", desc: "手術、處置、門診手術與實支實付一次看懂。", url: "https://dashin-team.github.io/surgery-insurance-guide/" },
-        { id: "teacher-liability", title: "教師責任險", desc: "老師您好：教職員責任險說明與試算。", url: "https://dashin-team.github.io/teacher-liability/" },
-        { id: "travel-insurance-guide", title: "旅平險大補給", desc: "海外旅行不便險與旅平險教材。", url: "https://dashin-team.github.io/travel-insurance-guide/" },
-        { id: "insurance-island", title: "保險保障島", desc: "富邦人壽業務員梁仕翰個人介紹頁。", url: "https://dashin-team.github.io/insurance-island/" }
-      ]
-    },
-    {
-      id: "team",
-      name: "團隊與新人",
-      kicker: "訓練與讀書會",
-      desc: "南恩新人訓練，以及讀書會講義。",
-      icon: "people",
-      sites: [
-        { id: "nanen-newbie-training", title: "南恩新人訓練", desc: "九大關卡演練與主管簽核。", url: "https://dashin-team.github.io/nanen-newbie-training/" },
-        { id: "reading-club-handouts", title: "讀書會講義", desc: "讀書會講義與重點整理。", url: "https://dashin-team.github.io/reading-club-handouts/" }
-      ]
-    },
-    {
-      id: "tools",
-      name: "內部工具",
-      kicker: "作業工具",
-      desc: "辦公室狀態、IG 輪播、開發地圖與保單小管家後台。",
-      icon: "tool",
-      sites: [
-        { id: "dashin-office", title: "4汗的辦公室", desc: "BOT 工作狀態一覽。", url: "https://dashin-team.github.io/dashin-office/" },
-        { id: "ig-carousel", title: "IG 輪播圖生成器", desc: "把文案做成 Instagram 輪播圖。", url: "https://dashin-team.github.io/ig-carousel/" },
-        { id: "tainan-prospects", title: "台南開發追蹤地圖", desc: "台南團險／產責險開發地圖，需登入。", url: "https://tainan-prospects.onrender.com/" },
-        { id: "baodan-admin", title: "保單小管家後台", desc: "仕翰保單小管家業務後台，需登入。", url: "https://baodan-shihan.baodan-shihan.workers.dev/admin.html" }
-      ]
-    }
   ];
 
   const byId = new Map();
@@ -310,8 +247,6 @@
   }
 
   function renderHome() {
-    const featured = GROUPS.filter((g) => g.featured);
-    const others = GROUPS.filter((g) => !g.featured);
     setChrome({ eyebrow: "工作台", title: "總覽" });
     setActive(null, null, true);
     els.content.innerHTML = `
@@ -322,19 +257,11 @@
         </div>
       </section>
       <section class="hero">
-        <p>南恩通訊處的網站都收在這裡。點左側分類或下方卡片，即可在工作台中開啟；無法嵌入的頁面會改在新分頁開啟。</p>
+        <p>競賽獎勵、每日報報、業績戰報與南恩 YouTube，都收在這個工作台。點左側分類或下方卡片即可開啟；南恩影片共享區會在新分頁開啟。</p>
       </section>
       <div class="stats featured">
-        ${featured.map((g) => `
+        ${GROUPS.map((g) => `
           <button class="stat featured" type="button" data-hash="#/g/${g.id}">
-            <div class="stat-kicker">${g.kicker}</div>
-            <div class="stat-num">${g.sites.length}</div>
-            <div class="stat-desc">${g.name}</div>
-          </button>`).join("")}
-      </div>
-      <div class="stats secondary">
-        ${others.map((g) => `
-          <button class="stat" type="button" data-hash="#/g/${g.id}">
             <div class="stat-kicker">${g.kicker}</div>
             <div class="stat-num">${g.sites.length}</div>
             <div class="stat-desc">${g.name}</div>
