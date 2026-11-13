@@ -635,7 +635,7 @@ img, svg { display: block; }
   .stats, .stats.secondary { grid-template-columns: repeat(2, 1fr); }
   .content, .topbar, .subnav-wrap { padding-left: 16px; padding-right: 16px; }
   #page-title { font-size: 19px; }
-  .hero-cover .hero-photo { aspect-ratio: 2.35 / 1; }
+  .hero-cover .hero-photo { aspect-ratio: 4 / 1; }
   .hero-cover { margin-bottom: 52px; }
 }
 
@@ -669,7 +669,7 @@ img, svg { display: block; }
 @media (max-width: 520px) {
   .stats, .stats.secondary { grid-template-columns: 1fr; }
   .topbar { gap: 10px; }
-  .hero-cover .hero-photo { aspect-ratio: 2.15 / 1; object-position: center; }
+  .hero-cover .hero-photo { aspect-ratio: 4 / 1; object-fit: contain; object-position: center; }
   .hero-cover { margin-bottom: 64px; }
   .brand-logo { width: 56px; height: 56px; flex-basis: 56px; }
 }
