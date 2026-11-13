@@ -18,6 +18,18 @@
     return `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${ICONS[name] || ""}</svg>`;
   }
 
+
+  // 登入閘門設定：真實帳密尚未決定。
+  // enabled 必須維持 false，在收到正式帳密並換成真實雜湊之前，不要上線開啟。
+  const AUTH = {
+    enabled: false,
+    storageKey: "nanen-portal-session-v1",
+    // 佔位雜湊（SHA-256 of "CHANGE_ME_USER" / "CHANGE_ME_PASS"），請一次改這裡。
+    userHash: "81be048adc3b20410e4625406dd75208c75e8de05a97e282aef1cbc9c5f6003b",
+    passHash: "25142f63e5154b0f7ec7b7031323aea167ee661a4007ce91e11a94e19542ad04"
+  };
+
+
   const GROUPS = [
     {
       id: "rewards",
@@ -259,7 +271,10 @@
     els.eyebrow.textContent = eyebrow;
     els.title.textContent = title;
     document.title = `${title}｜南恩通訊處`;
-    els.actions.innerHTML = actions;
+    const logout = (AUTH.enabled && isLoggedIn())
+      ? `<button class="btn" type="button" id="logout-btn">登出</button>`
+      : "";
+    els.actions.innerHTML = `${actions}${logout}`;
     if (tabs) {
       els.subnavWrap.hidden = false;
       els.subnav.innerHTML = tabs;
@@ -300,6 +315,12 @@
     setChrome({ eyebrow: "工作台", title: "總覽" });
     setActive(null, null, true);
     els.content.innerHTML = `
+      <section class="hero-cover" aria-label="南恩通訊處封面">
+        <img class="hero-photo" src="assets/banner.webp" alt="南恩通訊處｜台南最大心，服務最用心｜富邦人壽" />
+        <div class="hero-emblem">
+          <img src="assets/logo.webp" alt="大心 TN826" />
+        </div>
+      </section>
       <section class="hero">
         <p>南恩通訊處的網站都收在這裡。點左側分類或下方卡片，即可在工作台中開啟；無法嵌入的頁面會改在新分頁開啟。</p>
       </section>
@@ -428,6 +449,68 @@
   });
 
   window.addEventListener("hashchange", route);
+
+  document.addEventListener("click", (e) => {
+    if (e.target.closest("#logout-btn")) {
+      e.preventDefault();
+      logout();
+    }
+  });
+
+  async function sha256hex(text) {
+    const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function isLoggedIn() {
+    try { return localStorage.getItem(AUTH.storageKey) === "ok"; }
+    catch { return false; }
+  }
+
+  function logout() {
+    try { localStorage.removeItem(AUTH.storageKey); } catch {}
+    if (AUTH.enabled) showLogin();
+  }
+
+  function showLogin() {
+    const gate = document.getElementById("login-gate");
+    const app = document.querySelector(".app");
+    gate.hidden = false;
+    app.setAttribute("aria-hidden", "true");
+    const err = document.getElementById("login-error");
+    if (err) err.hidden = true;
+  }
+
+  function hideLogin() {
+    const gate = document.getElementById("login-gate");
+    const app = document.querySelector(".app");
+    gate.hidden = true;
+    app.removeAttribute("aria-hidden");
+  }
+
+  const form = document.getElementById("login-form");
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const user = document.getElementById("login-user").value;
+      const pass = document.getElementById("login-pass").value;
+      const err = document.getElementById("login-error");
+      const uh = await sha256hex(user.trim());
+      const ph = await sha256hex(pass);
+      if (uh === AUTH.userHash && ph === AUTH.passHash) {
+        try { localStorage.setItem(AUTH.storageKey, "ok"); } catch {}
+        hideLogin();
+        route();
+      } else if (err) {
+        err.hidden = false;
+      }
+    });
+  }
+
   renderNav();
-  route();
+  if (AUTH.enabled && !isLoggedIn()) {
+    showLogin();
+  } else {
+    route();
+  }
 })();
